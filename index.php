@@ -9,12 +9,14 @@
 
 <div id="dumper"></div>
 <script type="text/javascript">
+$(function() {
   var hash_tag = "cfabrigade";
   var json = emerge.ajax_get('ajax/twitter.gethashtag.php?ht='+hash_tag);
 
   // required to do this eval statement after quering json this way...
   json = eval('('+json+')');
   console.log(json);
+});
 
 </script>
 </body>
