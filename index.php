@@ -7,6 +7,9 @@
 
 <div id="dumper"></div>
 <script type="text/javascript">
+  var json = emerge.ajax_get('ajax/twitter.gethashtag.php');
+  json = eval('('+json+')');
+  console.log(json);
 
 </script>
 </body>
