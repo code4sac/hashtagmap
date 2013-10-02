@@ -15,7 +15,7 @@ $settings = array(
 
 $url = 'https://api.twitter.com/1.1/search/tweets.json';
 
-$getfield = '?q=#'.$hash_tag;
+$getfield = '?q=#'.$hash_tag.'&count=200';
 $requestMethod = 'GET';
 $twitter = new TwitterAPIExchange($settings);
 $ret = $twitter->setGetfield($getfield)
