@@ -33,19 +33,12 @@ $(function() {
    * ============================== */
   $.each(tweet_count, function(idx, val) {
     var tag   = val.tag;
-    //var layer = create_layer(tag);
-    //console.log("Query: "+tag+" ("+val.count+")");
-    //console.log(layer);
-    //layer.setMap(map);
+    var count = val.count;
     var tcolor = get_color(high_count, low_count, total_cnt, val.count);
-    var bar = fake_layer(tag);
-    bar.setMap(map);
+    var pgon = create_layer(tag, count);
+    pgon.setMap(map);
   });
 
-  /* Load Layers to map
-   * ================== */
-   //console.log(fLayers[1]);
-   //fLayers[1].setMap(map);
 
 }); //====End $(function());
 
@@ -56,7 +49,7 @@ var get_color = function(high, low, total, current) {
   }
 }
 
-var fake_layer = function(tag) {
+var create_layer = function(tag,count) {
   var coords = emerge.ajax_get('ajax/ftable.query.php?q='+tag);
   coords = eval("("+coords+")");
   var tc = [];
@@ -72,6 +65,12 @@ var fake_layer = function(tag) {
     fillColor: randColor,
     fillOpacity: 0.7
   });
+  google.maps.event.addListener(pgon, 'click', function(event) {
+    var iw = new google.maps.InfoWindow();
+    iw.setContent("<strong>HashTag:</strong> "+tag+"<br/><strong>Tweets:</strong> "+count);
+    iw.setPosition(tc[0]);
+    iw.open(map);
+  });
   return pgon;
 }
 
@@ -82,18 +81,6 @@ var get_random_color = function() {
     color += letters[Math.round(Math.random() * 15)];
   }
   return color;
-}
-
-var create_layer = function(tag) {
-  var layer = new google.maps.FusionTablesLayer({
-    query: {
-      //select: 'Geocodable address',
-      select: 'geometry',
-      from: table_id,
-      where: "hashtag CONTAINS IGNORING CASE '"+tag+"'"
-    },
-  }); //====End Layers Init
-  return layer;
 }
 </script>
 
