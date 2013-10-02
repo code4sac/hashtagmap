@@ -31,25 +31,32 @@ $(function() {
 
   /* Initialize Fusion Table Layers
    * ============================== */
+
+  // Need fix for colors. Horrible amount of code I put together for this...
+  console.log("Begin Colors");
+   
+  var need = tweet_count.length;
+  var upper = nearestPow2(need);
+  var allColors = '#FF0000'.hexsplit('#0000FF', upper);
+
+  console.log("need: "+need);
+  console.log("Upper: "+upper);
+  var colors = spaceColors(allColors, tweet_count[0].count, need);
+  console.log("End Colors");
+  // End Color Fix
   $.each(tweet_count, function(idx, val) {
+    var color = colors[idx];
     var tag   = val.tag;
     var count = val.count;
-    var tcolor = get_color(high_count, low_count, total_cnt, val.count);
-    var pgon = create_layer(tag, count);
+    var pgon = create_layer(tag, count, color);
     pgon.setMap(map);
   });
 
 
 }); //====End $(function());
 
-var get_color = function(high, low, total, current) {
-  var buckets = Math.round((total / 3) / 3);
-  console.log(buckets);
-  for(var i = 0; i < total; i++) {
-  }
-}
 
-var create_layer = function(tag,count) {
+var create_layer = function(tag,count, color) {
   var coords = emerge.ajax_get('ajax/ftable.query.php?q='+tag);
   coords = eval("("+coords+")");
   var tc = [];
@@ -59,11 +66,11 @@ var create_layer = function(tag,count) {
   var randColor = get_random_color();
   var pgon = new google.maps.Polygon({
     paths: tc,
-    strokeColor: '#000000',
+    strokeColor: color,
     strokeOpacity: 0.8,
     strokeWeight: .3,
     fillColor: randColor,
-    fillOpacity: 0.7
+    fillOpacity: 0.3
   });
   google.maps.event.addListener(pgon, 'click', function(event) {
     var iw = new google.maps.InfoWindow();
